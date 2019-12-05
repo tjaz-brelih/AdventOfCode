@@ -11,16 +11,8 @@ let rec readlines (filepath: string) = seq {
 let calculateFuel mass =
     (mass / 3) - 2
 
-let calculateModulesFuel list =
-    list
-    |> Seq.map int
-    |> Seq.map calculateFuel 
-    |> Seq.sum
-
 let rec calculateFuelFuel mass =
-    let fuelMass = mass |> calculateFuel
-
-    match fuelMass with
+    match mass |> calculateFuel with
     | x when x > 0 -> x + (x |> calculateFuelFuel)
     | _ -> 0
 
@@ -36,5 +28,4 @@ let main _ =
     let totalModulesFuelFold = fuelPerModules |> Seq.fold (fun acc el -> acc + (el |> calculateFuelFuel)) 0 
     (totalModulesFuelFold + modulesFuel) |> printfn "%d"
     
-
     0
