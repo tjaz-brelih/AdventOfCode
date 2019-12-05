@@ -10,7 +10,7 @@
     <Content Include="input.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Compile Include="Program.fs" />
+    <Compile Include="Day1.fs" />
   </ItemGroup>
 
   <ItemGroup />
