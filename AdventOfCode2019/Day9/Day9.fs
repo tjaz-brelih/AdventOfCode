@@ -8,7 +8,6 @@ let rec readlines (filepath: string) = seq {
 }
 
 
-
 let getValueParam (program: int64[]) (relBase: int) (index: int) param =
     match param with
         | 0 -> program.[program.[index] |> int]
