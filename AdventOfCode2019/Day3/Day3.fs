@@ -25,7 +25,11 @@ let calculateLines wire =
     |> List.pairwise
 
 let lineIntersect ((x1,y1),(x2,y2)) ((x3,y3),(x4,y4)) =
-    Some()
+    let i1x, i1y = x3, y1
+    let i2x, i2y = x1, y3
+
+
+    None
 
 
 [<EntryPoint>]
@@ -37,6 +41,13 @@ let main _ =
     let w1 = extractWire 0
     let w2 = extractWire 1
 
+    w1 |> printfn "%A"
+    w2 |> printfn "%A"
+
     let intersections = [for l1 in w1 do for l2 in w2 do yield lineIntersect l1 l2] |> List.filter (fun x -> x.IsSome)
+
+    intersections |> printfn "%A"
+    //intersections |>  |> printfn "%A"
+    //intersections |> List.map (fun (Some (x,y)) -> x + y) |> List.min |> printfn "%d"
 
     0
