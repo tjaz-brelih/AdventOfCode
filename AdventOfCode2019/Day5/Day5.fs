@@ -8,10 +8,6 @@ let rec readlines (filepath: string) = seq {
 }
 
 
-let rec intToArray input =
-    match input with
-    | x when x < 10 -> [x]
-    | x -> (x / 10) |> intToArray |> List.append <| [x % 10]
 
 let matchParam (program: int[]) index param =
     match param with
