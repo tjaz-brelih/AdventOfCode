@@ -9,10 +9,7 @@
     <Content Include="input.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="input5.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Compile Include="Day3.fs" />
+    <Compile Include="Day03.fs" />
   </ItemGroup>
 
   <ItemGroup />

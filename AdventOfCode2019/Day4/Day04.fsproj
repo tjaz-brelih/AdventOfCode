@@ -6,12 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="input.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Compile Include="Day9.fs" />
+    <Compile Include="Day04.fs" />
   </ItemGroup>
-
-  <ItemGroup />
 
 </Project>
