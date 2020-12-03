@@ -40,8 +40,6 @@ Console.WriteLine(resultTwo);
 
 
 
-
-
 static long CheckTreesCount(IList<string> input, (int x, int y) direction)
 {
     var columnIndex = 0;

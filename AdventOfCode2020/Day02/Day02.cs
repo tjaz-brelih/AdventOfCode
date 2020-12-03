@@ -3,43 +3,35 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 
+using Day02;
 
-namespace Day02
+
+var file = new StreamReader("input.txt");
+
+List<Policy> policies = new();
+
+while (file.ReadLine() is string line)
 {
-    public class Day02
-    {
-        public static void Main()
-        {
-            var file = new StreamReader("input.txt");
-            string line;
+    var span = line.AsSpan();
 
-            List<Policy> policies = new();
+    var separatorIndex = span.IndexOf('-');
+    var spaceIndex = span.IndexOf(' ');
 
-            while ((line = file.ReadLine()) is not null)
-            {
-                var span = line.AsSpan();
+    var min = span[0..separatorIndex].ToString();
+    var max = span[(separatorIndex + 1)..spaceIndex].ToString();
 
-                var separatorIndex = span.IndexOf('-');
-                var spaceIndex = span.IndexOf(' ');
+    var letter = span[spaceIndex + 1];
 
-                var min = span[0..separatorIndex].ToString();
-                var max = span[(separatorIndex + 1)..spaceIndex].ToString();
+    var password = span[(spaceIndex + 4)..];
 
-                var letter = span[spaceIndex + 1];
-
-                var password = span[(spaceIndex + 4)..];
-
-                policies.Add(new(int.Parse(min), int.Parse(max), letter, password.ToString()));
-            }
-
-
-
-            var resultCount = policies.Count(p => p.CheckPasswordAgainstCountPolicy());
-            Console.WriteLine(resultCount);
-
-
-            var resultPosition = policies.Count(p => p.CheckPasswordAgainstPositionPolicy());
-            Console.WriteLine(resultPosition);
-        }
-    }
+    policies.Add(new(int.Parse(min), int.Parse(max), letter, password.ToString()));
 }
+
+
+
+var resultCount = policies.Count(p => p.CheckPasswordAgainstCountPolicy());
+Console.WriteLine(resultCount);
+
+
+var resultPosition = policies.Count(p => p.CheckPasswordAgainstPositionPolicy());
+Console.WriteLine(resultPosition);
