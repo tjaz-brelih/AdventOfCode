@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using Day04.Models;
 
 
-var file = new StreamReader("input.txt");
+using var file = new StreamReader("input.txt");
 
 Dictionary<string, string> data = new();
 
@@ -34,9 +34,12 @@ while (file.ReadLine() is string line)
     }
 }
 
-file.Close();
+if (Passport.ContainsRequiredProperties(data))
+{
+    passports.Add(Passport.FromDictionary(data));
+}
 
 
-Console.WriteLine(passports.Count());
+Console.WriteLine(passports.Count);
 
 Console.WriteLine(passports.Where(p => p is not null).Count(p => p!.IsValid));
