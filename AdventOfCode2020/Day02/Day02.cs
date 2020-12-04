@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using Day02;
 
 
-var file = new StreamReader("input.txt");
+using var file = new StreamReader("input.txt");
 
 List<Policy> policies = new();
 

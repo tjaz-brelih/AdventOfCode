@@ -3,7 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 
 
-var file = new StreamReader("input.txt");
+using var file = new StreamReader("input.txt");
 
 List<int> expenses = new();
 

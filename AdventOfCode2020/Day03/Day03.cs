@@ -4,7 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 
-var file = new StreamReader("input.txt");
+using var file = new StreamReader("input.txt");
 
 List<string> lines = new();
 
