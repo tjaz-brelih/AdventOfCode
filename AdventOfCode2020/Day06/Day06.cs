@@ -34,12 +34,5 @@ while (true)
 var resultOne = groups.Sum(g => g.SelectMany(g => g.ToList()).Distinct().Count());
 Console.WriteLine(resultOne);
 
-
-var resultTwo = 0;
-foreach (var group in groups)
-{
-    var peopleCount = group.Count;
-
-    resultTwo += group.SelectMany(g => g.ToList()).GroupBy(c => c).Select(g => g.Count()).Where(c => c == peopleCount).Count();
-}
+var resultTwo = groups.Sum(group => group.SelectMany(g => g.ToList()).GroupBy(c => c).Select(g => g.Count()).Where(c => c == group.Count).Count());
 Console.WriteLine(resultTwo);
