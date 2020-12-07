@@ -9,19 +9,19 @@ using Day07;
 using var file = new StreamReader("input.txt");
 
 List<string> lines = new();
-HashSet<Bag> topLevelBags = new();
 
 while (file.ReadLine() is string line)
 {
     lines.Add(line);
 }
 
+
+HashSet<Node> nodes = new();
+
 foreach (var line in lines)
 {
     var bagTokens = line.Split(' ');
-
-    Bag currentBag = new(bagTokens[0] + " " + bagTokens[1]);
-    topLevelBags.Add(currentBag);
+    nodes.Add(new Node(bagTokens[0] + " " + bagTokens[1]));
 }
 
 
@@ -35,25 +35,23 @@ foreach (var line in lines)
         continue;
     }
 
-    var topLevelBag = topLevelBags.SingleOrDefault(b => b.Name == bagTokens[0] + " " + bagTokens[1]);
-    
-    var containedTopLevelBag = topLevelBags.Single(b => b.Name == bagTokens[5] + " " + bagTokens[6]);
-    topLevelBag.ContainedBags.Add(containedTopLevelBag);
+    var topLevelNode = nodes.SingleOrDefault(b => b.Name == bagTokens[0] + " " + bagTokens[1]);
+
+    var containedTopLevelNode = nodes.Single(b => b.Name == bagTokens[5] + " " + bagTokens[6]);
+    topLevelNode.AddRelation(containedTopLevelNode, int.Parse(bagTokens[4]));
 
     foreach (var bag in bags.Skip(1))
     {
         bagTokens = bag.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        containedTopLevelBag = topLevelBags.Single(b => b.Name == bagTokens[1] + " " + bagTokens[2]);
+        containedTopLevelNode = nodes.Single(b => b.Name == bagTokens[1] + " " + bagTokens[2]);
 
-        topLevelBag.ContainedBags.Add(containedTopLevelBag);
+        topLevelNode.AddRelation(containedTopLevelNode, int.Parse(bagTokens[0]));
     }
 }
 
 
-List<Bag> goldBags = new();
-foreach (var bag in topLevelBags)
-{
-    bag.Contains("shiny gold", goldBags);
-}
+var resultOne = nodes.Single(n => n.Name == "shiny gold").SourceNodes().Count();
+Console.WriteLine(resultOne);
 
-Console.WriteLine(goldBags.Where(b => b.Name != "shiny gold").Select(b => b.Name).Distinct().Count());
+var resultTwo = nodes.Single(n => n.Name == "shiny gold").DestinationsCount();
+Console.WriteLine(resultTwo);
