@@ -42,13 +42,8 @@ for (int i = 1; i < adapters.Count; i++)
 {
     var currentKey = adapters.ElementAt(i).Key;
 
-    for (int j = 1; j < 4; j++)
+    for (int j = 1; j < 4 && i - j >= 0; j++)
     {
-        if(i - j < 0)
-        {
-            break;
-        }
-
         var prev = adapters.ElementAt(i - j);
         if (currentKey - prev.Key > 3)
         {
