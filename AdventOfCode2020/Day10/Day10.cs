@@ -4,9 +4,9 @@ using System.Linq;
 using System.Collections.Generic;
 
 
-using var file = new StreamReader("input2.txt");
+using var file = new StreamReader("input.txt");
 
-SortedDictionary<int, int> adapters = new();
+SortedDictionary<int, ulong> adapters = new();
 
 while (file.ReadLine() is string line)
 {
@@ -40,36 +40,25 @@ adapters[0] = 1;
 
 for (int i = 1; i < adapters.Count; i++)
 {
-    var firstKey = adapters.ElementAt(i).Key;
+    var currentKey = adapters.ElementAt(i).Key;
 
     for (int j = 1; j < 4; j++)
     {
-        if (i - j < 0 || firstKey - adapters.ElementAt(i - j).Key > 3)
+        if(i - j < 0)
         {
             break;
         }
 
-        adapters[firstKey]++;
+        var prev = adapters.ElementAt(i - j);
+        if (currentKey - prev.Key > 3)
+        {
+            break;
+        }
+
+        adapters[currentKey] += prev.Value;
     }
 }
 
 
-var resultTwo = adapters.Aggregate(1UL, (acc, kvPair) => acc * (ulong) kvPair.Value);
-//for (int i = 0; i < adapters.Count - 1; i++)
-//{
-//    var adapter = adapters.ElementAt(i);
-//    var value = adapter.Value;
-
-//    for (int j = 1; j < adapter.Value; j++)
-//    {
-//        var nextAdapter = adapters.ElementAt(i + j);
-//        if (nextAdapter.Value > 1)
-//        {
-//            value--;
-//        }
-//    }
-
-//    resultTwo *= (ulong) value;
-//}
-
+var resultTwo = adapters.Last().Value;
 Console.WriteLine(resultTwo);
