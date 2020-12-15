@@ -26,9 +26,8 @@ foreach (var number in startingNumbers)
 while (currentTurn <= 2020)
 {
     var spokenBefore = spokenAtTurns.TryGetValue(lastSpokenNumber, out var lastTurns);
-    spokenBefore = spokenBefore && lastTurns.Item2 != 0;
 
-    lastSpokenNumber = spokenBefore switch
+    lastSpokenNumber = (spokenBefore && lastTurns.Item2 != 0) switch
     {
         true => lastTurns.Item1 - lastTurns.Item2,
         false => 0
@@ -45,7 +44,6 @@ Console.WriteLine(resultOne);
 
 
 spokenAtTurns.Clear();
-
 lastSpokenNumber = 0;
 currentTurn = 1;
 
@@ -60,9 +58,8 @@ foreach (var number in startingNumbers)
 while (currentTurn <= 30000000)
 {
     var spokenBefore = spokenAtTurns.TryGetValue(lastSpokenNumber, out var lastTurns);
-    spokenBefore = spokenBefore && lastTurns.Item2 != 0;
 
-    lastSpokenNumber = spokenBefore switch
+    lastSpokenNumber = (spokenBefore && lastTurns.Item2 != 0) switch
     {
         true => lastTurns.Item1 - lastTurns.Item2,
         false => 0
