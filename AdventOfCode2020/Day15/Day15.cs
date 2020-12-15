@@ -23,14 +23,14 @@ foreach (var number in startingNumbers)
     currentTurn++;
 }
 
-
 while (currentTurn <= 2020)
 {
     var spokenBefore = spokenAtTurns.TryGetValue(lastSpokenNumber, out var lastTurns);
     spokenBefore = spokenBefore && lastTurns.Item2 != 0;
 
-    lastSpokenNumber = spokenBefore switch {
-        true  => lastTurns.Item1 - lastTurns.Item2,
+    lastSpokenNumber = spokenBefore switch
+    {
+        true => lastTurns.Item1 - lastTurns.Item2,
         false => 0
     };
 
@@ -57,14 +57,14 @@ foreach (var number in startingNumbers)
     currentTurn++;
 }
 
-
 while (currentTurn <= 30000000)
 {
     var spokenBefore = spokenAtTurns.TryGetValue(lastSpokenNumber, out var lastTurns);
     spokenBefore = spokenBefore && lastTurns.Item2 != 0;
 
-    lastSpokenNumber = spokenBefore switch {
-        true  => lastTurns.Item1 - lastTurns.Item2,
+    lastSpokenNumber = spokenBefore switch
+    {
+        true => lastTurns.Item1 - lastTurns.Item2,
         false => 0
     };
 
@@ -82,7 +82,8 @@ Console.WriteLine(resultTwo);
 
 static void SpeakNumber(Dictionary<int, (int, int)> turns, int valueSpoken, int currentTurn)
 {
-    turns[valueSpoken] = turns.TryGetValue(valueSpoken, out var lastTurns) switch {
+    turns[valueSpoken] = turns.TryGetValue(valueSpoken, out var lastTurns) switch
+    {
         true => (currentTurn, lastTurns.Item1),
         false => (currentTurn, 0)
     };
