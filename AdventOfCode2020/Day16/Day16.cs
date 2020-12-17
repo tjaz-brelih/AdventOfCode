@@ -47,44 +47,27 @@ Console.WriteLine(resultOne);
 
 
 
-var validTickets = nearbyTickets
-    .Where(t => t.All(f => rules.Any(r => r.InAnyRange(f))));
+var validTickets = nearbyTickets.Where(t => t.All(f => rules.Any(r => r.InAnyRange(f))));
 
+var avaliableRules = rules.ToHashSet();
 Dictionary<Rule, int> ruleColumn = new();
 
-while (true)
+while (avaliableRules.Count > 0)
 {
-    var unknownRules = rules.Where(r => !ruleColumn.ContainsKey(r));
-
-    if (!unknownRules.Any())
+    for (int i = 0; i < validTickets.First().Count; i++)
     {
-        break;
-    }
+        var validRules = avaliableRules.Where(r => validTickets.All(t => r.InAnyRange(t[i])));
 
-    foreach (var rule in unknownRules)
-    {
-        var ruleConforms = false;
-
-        for (int i = 0; i < validTickets.First().Count; i++)
+        if (validRules.Count() == 1)
         {
-            ruleConforms = validTickets.Select(t => t[i]).All(f => rule.InAnyRange(f));
+            var rule = validRules.Single();
 
-            if (ruleConforms)
-            {
-                ruleColumn[rule] = i;
-                break;
-            }
-        }
-
-        if (ruleConforms)
-        {
-            break;
+            ruleColumn[rule] = i;
+            avaliableRules.Remove(rule);
         }
     }
 }
 
-var resultTwo = ruleColumn
-    .Where(kv => kv.Key.Name.StartsWith("direction"))
-    .Aggregate(1UL, (acc, kv) => acc * (ulong) myTicket[kv.Value]);
-
+var directionRules = ruleColumn.Where(kv => kv.Key.Name.StartsWith("departure"));
+var resultTwo = directionRules.Aggregate(1UL, (acc, kv) => acc * (ulong) myTicket[kv.Value]);
 Console.WriteLine(resultTwo);
