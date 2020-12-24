@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -17,7 +16,7 @@ while (file.ReadLine() is string line)
 
 
 
-Dictionary<(int, int), bool> floor = new();
+HashSet<(int, int)> floor = new();
 
 foreach (var line in lines)
 {
@@ -32,6 +31,7 @@ foreach (var line in lines)
         if (line[index] == 'w' || line[index] == 'e')
         {
             first = line[index];
+
             index++;
         }
         else
@@ -44,13 +44,13 @@ foreach (var line in lines)
 
         (var dX, var dY) = (first, second) switch
         {
-            ('e', _) => (2, 0),
-            ('w', _) => (-2, 0),
+            ('e', _) => (1, 0),
+            ('w', _) => (-1, 0),
 
             ('s', 'e') => (1, -1),
-            ('s', 'w') => (-1, -1),
+            ('s', 'w') => (0, -1),
 
-            ('n', 'e') => (1, 1),
+            ('n', 'e') => (0, 1),
             ('n', 'w') => (-1, 1),
 
             _ => throw new InvalidDataException()
@@ -60,11 +60,10 @@ foreach (var line in lines)
         coordinates.Y += dY;
     }
 
-
-    floor[coordinates] = floor.TryGetValue(coordinates, out var value) ? !value : true;
+    _ = floor.Contains(coordinates) ? floor.Remove(coordinates) : floor.Add(coordinates);
 }
 
-var resultOne = floor.Where(kv => kv.Value).Count();
+var resultOne = floor.Count;
 Console.WriteLine(resultOne);
 
 
