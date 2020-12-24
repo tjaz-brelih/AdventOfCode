@@ -19,15 +19,14 @@ while (file.ReadLine() is string line)
 
 static long EvaluateExpression(ReadOnlySpan<char> input)
 {
-    var firstIndex = input.IndexOf('(');
-    var lastIndex = input.IndexOf(')');
+    var startIndex = input.IndexOf('(');
+    var endIndex = input.IndexOf(')');
 
     var expressionValue = 0L;
 
-    if (firstIndex >= 0 && lastIndex >= 0)
+    if (startIndex >= 0 && endIndex >= 0)
     {
-        expressionValue = EvaluateExpression(input[(firstIndex + 1)..lastIndex]);
-
+        expressionValue = EvaluateExpression(input[(startIndex + 1)..endIndex]);
     }
     else
     {
