@@ -68,8 +68,8 @@ Console.WriteLine(resultOne);
 
 
 
-Dictionary<(int X, int Y), bool> floor = new( blackTiles.Select(t => new KeyValuePair<(int, int), bool>(t, true) ));
-Dictionary<(int X, int Y), bool> floorPrev = new();
+Dictionary<(int, int), bool> floor = new(blackTiles.Select(t => new KeyValuePair<(int, int), bool>(t, true)));
+Dictionary<(int, int), bool> floorPrev = new();
 
 for (int eh = 0; eh < 100; eh++)
 {
@@ -78,10 +78,8 @@ for (int eh = 0; eh < 100; eh++)
     (int minX, int minY) = (int.MaxValue, int.MaxValue);
     (int maxX, int maxY) = (int.MinValue, int.MinValue);
 
-    foreach (var state in floor)
+    foreach ((int X, int Y) in floor.Keys)
     {
-        (int X, int Y) = state.Key;
-
         if (X < minX)
             minX = X;
         if (X > maxX)
