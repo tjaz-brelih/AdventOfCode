@@ -9,25 +9,22 @@ while (file.ReadLine() is string line)
 
 
 
-var zip = lines.Append(uint.MaxValue).Zip(lines.Skip(1));
+var resultOne = lines.Append(uint.MaxValue)
+    .Zip(lines.Skip(1))
+    .Count(t => t.Second > t.First);
+Console.WriteLine(resultOne);
 
-Console.WriteLine(zip.Count(t => t.Second > t.First));
 
 
+var sums = lines.Append(uint.MaxValue).Append(uint.MaxValue)
+    .Zip(
+        lines.Skip(1).Append(uint.MaxValue),
+        lines.Skip(2)
+    )
+    .Select(t => t.First + t.Second + t.Third);
 
-uint prevSum = 0;
-int largerCount = -1;
+var resultTwo = sums.Append(uint.MaxValue)
+    .Zip(sums.Skip(1))
+    .Count(t => t.Second > t.First);
 
-for (int i = 0; i < lines.Count - 2; i++)
-{
-    var curSum = lines[i] + lines[i + 1] + lines[i + 2];
-
-    if (curSum > prevSum)
-    {
-        largerCount++;
-    }
-    
-    prevSum = curSum;
-}
-
-Console.WriteLine(largerCount);
+Console.WriteLine(resultTwo);
