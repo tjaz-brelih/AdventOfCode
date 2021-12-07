@@ -1,12 +1,6 @@
 ﻿using var file = new StreamReader("input.txt");
 
-List<int> crabs = null!;
-
-while (file.ReadLine() is string line)
-{
-    var tokens = line.Split(',');
-    crabs = tokens.Select(t => int.Parse(t)).ToList();
-}
+var crabs = file.ReadLine()!.Split(',').Select(t => int.Parse(t)).ToList();
 
 
 

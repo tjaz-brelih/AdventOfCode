@@ -1,21 +1,15 @@
 ﻿using var file = new StreamReader("input.txt");
 
-List<int>? fishes = null;
-
-while (file.ReadLine() is string line)
-{
-    var tokens = line.Split(',');
-    fishes = tokens.Select(t => int.Parse(t)).ToList();
-}
+var fishes = file.ReadLine()!.Split(',').Select(t => int.Parse(t)).ToList();
 
 
 
-var resultOne = SimulateGrowth(80, fishes!);
+var resultOne = SimulateGrowth(80, fishes);
 Console.WriteLine(resultOne);
 
 
 
-var resultTwo = SimulateGrowth(256, fishes!);
+var resultTwo = SimulateGrowth(256, fishes);
 Console.WriteLine(resultTwo);
 
 
