@@ -22,26 +22,42 @@ foreach (var (debug, output) in lines)
 {
     Dictionary<int, string> numberMap = new()
     {
-        { 1, debug.Single(d => d.Length == 2) },
-        { 4, debug.Single(d => d.Length == 4) },
-        { 7, debug.Single(d => d.Length == 3) },
-        { 8, debug.Single(d => d.Length == 7) }
+        { 1, debug.First(d => d.Length == 2) },
+        { 4, debug.First(d => d.Length == 4) },
+        { 7, debug.First(d => d.Length == 3) },
+        { 8, debug.First(d => d.Length == 7) }
     };
 
-    numberMap.Add(3, debug.First(d => d.Length == 5 && d.Intersect(numberMap[1]).Count() == 2));
-    numberMap.Add(6, debug.First(d => d.Length == 6 && d.Intersect(numberMap[1]).Count() == 1));
-    numberMap.Add(9, debug.First(d => d.Length == 6 && d.Intersect(numberMap[3]).Count() == numberMap[3].Length));
-    numberMap.Add(5, debug.First(d => d.Length == 5 && numberMap[9].Except(d).Count() == 1 && d != numberMap[3]));
-    numberMap.Add(2, debug.First(d => d.Length == 5 && d != numberMap[3] && d != numberMap[5]));
-    numberMap.Add(0, debug.First(d => !numberMap.ContainsValue(d)));
+    var similarities = debug
+        .Where(d => !numberMap.ContainsValue(d))
+        .Select(d => (Number: d, Similarity(numberMap[1], d), Similarity(numberMap[4], d), Similarity(numberMap[7], d), Similarity(numberMap[8], d)));
+
+    foreach (var item in similarities)
+    {
+        var number = item switch
+        {
+            (_, 2, 3, 3, 6) => 0,
+            (_, 1, 2, 2, 5) => 2,
+            (_, 2, 3, 3, 5) => 3,
+            (_, 1, 3, 2, 5) => 5,
+            (_, 1, 3, 2, 6) => 6,
+            (_, 2, 4, 3, 6) => 9
+        };
+
+        numberMap.Add(number, item.Number);
+    }
 
     uint partialSum = 0;
     for (int i = 0; i < 4; i++)
     {
-        var number = numberMap.Single(n => n.Value.Length == output[i].Length && n.Value.Intersect(output[i]).Count() == output[i].Length).Key;
+        var number = numberMap.First(n => n.Value.Length == output[i].Length && n.Value.Intersect(output[i]).Count() == output[i].Length).Key;
         partialSum += (uint) number * (uint) Math.Pow(10, 3 - i);
     }
     resultTwo += partialSum;
 }
 
 Console.WriteLine(resultTwo);
+
+
+static int Similarity(string a, string b)
+    => a.Intersect(b).Count();
