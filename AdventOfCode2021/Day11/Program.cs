@@ -51,7 +51,7 @@ var levelsTwo = (int[,]) levels.Clone();
 var allFlashed = false;
 var resultTwo = 0;
 
-while (allFlashed)
+while (!allFlashed)
 {
     for (int x = 0; x < 10; x++)
     {
