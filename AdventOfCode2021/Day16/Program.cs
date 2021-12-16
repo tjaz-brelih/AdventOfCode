@@ -3,7 +3,7 @@
 var input = file.ReadLine();
 
 var index = 0;
-Span<byte> packetData = stackalloc byte[input!.Length * 4];
+var packetData = new byte[input!.Length * 4];
 
 foreach (var c in input)
 {
