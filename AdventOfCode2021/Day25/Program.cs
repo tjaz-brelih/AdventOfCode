@@ -9,7 +9,7 @@ var maxY = 0;
 
 while (file.ReadLine() is string line)
 {
-    maxX = line.Length;
+    maxX = line.Length - 1;
 
     for (int i = 0; i < line.Length; i++)
     {
@@ -25,16 +25,13 @@ while (file.ReadLine() is string line)
     y++;
 }
 
-maxY = y;
+maxY = y - 1;
 
 // Part 1
-var steps = 0;
+var steps = 1;
 
 HashSet<(int, int)> newEast = new();
 HashSet<(int, int)> newSouth = new();
-
-Print(maxX, maxY, east, south);
-Console.WriteLine();
 
 while (true)
 {
@@ -42,7 +39,7 @@ while (true)
 
     foreach (var entity in east)
     {
-        var posX = entity.Item1 + 1 > maxX ? 0 : entity.Item1 + 1;
+        var posX = (entity.Item1 + 1 > maxX) ? 0 : (entity.Item1 + 1);
         var pos = (posX, entity.Item2);
 
         if (!east.Contains(pos) && !south.Contains(pos))
@@ -58,10 +55,10 @@ while (true)
 
     foreach (var entity in south)
     {
-        var posY = entity.Item2 + 1 > maxX ? 0 : entity.Item2 + 1;
+        var posY = (entity.Item2 + 1 > maxY) ? 0 : (entity.Item2 + 1);
         var pos = (entity.Item1, posY);
 
-        if (!east.Contains(pos) && !south.Contains(pos))
+        if (!newEast.Contains(pos) && !south.Contains(pos))
         {
             newSouth.Add(pos);
             movements++;
@@ -74,9 +71,6 @@ while (true)
 
     east = newEast.ToHashSet();
     south = newSouth.ToHashSet();
-
-    Print(maxX, maxY, east, south);
-    Console.WriteLine();
 
     newEast.Clear(); newSouth.Clear();
 
@@ -93,15 +87,15 @@ Console.WriteLine(steps);
 
 static void Print(int maxX, int maxY, IEnumerable<(int x, int y)> east, IEnumerable<(int x, int y)> south)
 {
-    for (int i = 0; i < maxY; i++)
+    for (int i = 0; i < maxY + 1; i++)
     {
-        for (int j = 0; j < maxX; j++)
+        for (int j = 0; j < maxX + 1; j++)
         {
-            if (east.Contains((i, j)))
+            if (east.Contains((j, i)))
             {
                 Console.Write('>');
             }
-            else if (south.Contains((i, j)))
+            else if (south.Contains((j, i)))
             {
                 Console.Write('v');
             }
