@@ -1,32 +1,32 @@
-﻿using var file = new StreamReader("inputTest.txt");
+﻿using Day13;
 
-List<(string, string)> packetPairs = new();
+using var file = new StreamReader("input.txt");
+
+List<(Item, Item)> packetPairs = new();
 
 while (file.ReadLine() is string firstLine)
 {
     var secondLine = file.ReadLine()!;
 
-    packetPairs.Add((firstLine, secondLine));
+    packetPairs.Add((ParseItem(firstLine), ParseItem(secondLine)));
 
     file.ReadLine();
 }
 
 
 // Part 1
-var resultOne = 0;
 var pair = 1;
+var resultOne = 0;
+ItemComparer comparer = new();
 
 foreach (var (first, second) in packetPairs)
 {
-    resultOne += CompareLists(first.AsSpan()[1..^1], second.AsSpan()[1..^1]) switch
+    resultOne += comparer.Compare(first, second) switch
     {
-        true => pair,
-        false => 0,
+        < 0 => pair,
+        > 0 => 0,
         _ => throw new Exception()
     };
-
-    Console.WriteLine($"Pair {pair}");
-    Console.WriteLine(resultOne);
 
     pair++;
 }
@@ -34,110 +34,68 @@ foreach (var (first, second) in packetPairs)
 Console.WriteLine(resultOne);
 
 
+// Part 2
+var dividers = new[] { ParseItem("[[2]]"), ParseItem("[[6]]") };
 
+var order = 1;
+var resultTwo = 1;
 
-static bool? CompareLists(ReadOnlySpan<char> first, ReadOnlySpan<char> second)
+foreach (var packet in packetPairs.SelectMany(x => new[] { x.Item1, x.Item2 }).Concat(dividers).Order(comparer))
 {
-    if (first.IsEmpty && second.IsEmpty)
+    if (dividers.Contains(packet))
     {
-        return null;
-    }
-    else if (first.IsEmpty)
-    {
-        return true;
-    }
-    else if (second.IsEmpty)
-    {
-        return false;
+        resultTwo *= order;
     }
 
-    var isFirstDigit = char.IsAsciiDigit(first[0]);
-    var firstNextValueRange = NextValue(first);
-    var firstValue = first[firstNextValueRange.Item1..firstNextValueRange.Item2];
-
-    var isSecondDigit = char.IsAsciiDigit(second[0]);
-    var secondNextValueRange = NextValue(second);
-    var secondValue = second[secondNextValueRange.Item1..secondNextValueRange.Item2];
-
-    if (isFirstDigit && isSecondDigit)
-    {
-        var firstDigit = int.Parse(firstValue);
-        var secondDigit = int.Parse(secondValue);
-
-        if (firstDigit < secondDigit)
-        {
-            return true;
-        }
-        else if (firstDigit > secondDigit)
-        {
-            return false;
-        }
-    }
-    else
-    {
-        var ret = CompareLists(firstValue, secondValue);
-        if (ret is not null)
-        {
-            return ret;
-        }
-
-        first = first[firstNextValueRange.Item2..];
-        second = second[secondNextValueRange.Item2..];
-    }
-
-
-    var firstNext = first.IndexOf(',');
-    var secondNext = second.IndexOf(',');
-
-    if (firstNext == -1 && secondNext == -1)
-    {
-        return null;
-    }
-    else if (firstNext == -1)
-    {
-        return true;
-    }
-    else if (secondNext == -1)
-    {
-        return false;
-    }
-
-    return CompareLists(first[(firstNext + 1)..], second[(secondNext + 1)..]);
+    order++;
 }
 
-static (int, int) NextValue(ReadOnlySpan<char> span)
-{
-    return span[0] == '['
-        ? GetNextListRange(span)
-        : (0, NextTokenStart(span));
-}
+Console.WriteLine(resultTwo);
 
-static int NextTokenStart(ReadOnlySpan<char> span)
+
+
+
+static Item ParseItem(ReadOnlySpan<char> span)
 {
-    int[] indices = new int[]
+    if (char.IsAsciiDigit(span[0]))
     {
-        span.IndexOf(','),
-        span.IndexOf('['),
-    };
-
-    return indices
-        .Where(x => x != -1)
-        .DefaultIfEmpty(span.Length)
-        .Min();
-}
-
-static (int Start, int End) GetNextListRange(ReadOnlySpan<char> span)
-{
-    var startIndex = span.IndexOf('[');
-    if (startIndex < 0)
-    {
-        return (0, span.Length);
+        return new Item(int.Parse(span));
     }
 
+    var endIndex = GetArrayIndexEnd(span);
+
+    List<Item> items = new();
+
+    for (int i = 1; i < endIndex; i++)
+    {
+        if (char.IsAsciiDigit(span[i]))
+        {
+            var index = span[i..endIndex].IndexOfAny(",]");
+
+            if (index == -1)
+            {
+                items.Add(ParseItem(span[i..endIndex]));
+                break;
+            }
+
+            items.Add(ParseItem(span[i..(index + i)]));
+            i += index;
+        }
+        else if (span[i] == '[')
+        {
+            items.Add(ParseItem(span[i..endIndex]));
+        }
+    }
+
+    return new Item(items);
+}
+
+static int GetArrayIndexEnd(ReadOnlySpan<char> span)
+{
     var listLevel = 0;
     var endIndex = span.Length;
 
-    for (int i = startIndex; i < span.Length; i++)
+    for (int i = 0; i < span.Length; i++)
     {
         listLevel += span[i] switch
         {
@@ -153,5 +111,59 @@ static (int Start, int End) GetNextListRange(ReadOnlySpan<char> span)
         }
     }
 
-    return (startIndex + 1, endIndex);
+    return endIndex;
+}
+
+class ItemComparer : IComparer<Item>
+{
+    public int Compare(Item? x, Item? y)
+    {
+        if (x is null || y is null) return 0;
+
+        return this.CompareItems(x, y) switch
+        {
+            true => -1,
+            false => 1,
+            _ => throw new Exception()
+        };
+    }
+
+    private bool? CompareItems(Item first, Item second)
+    {
+        if (first.IsInt && second.IsInt)
+        {
+            if (first.Value < second.Value) { return true; }
+            if (first.Value > second.Value) { return false; }
+
+            return null;
+        }
+
+        if (first.IsList && second.IsList)
+        {
+            for (int i = 0; i < Math.Min(first.Items!.Count, second.Items!.Count); i++)
+            {
+                var ret = CompareItems(first.Items[i], second.Items[i]);
+                if (ret is not null) { return ret; }
+            }
+
+            if (first.Items.Count < second.Items.Count) { return true; }
+            if (first.Items.Count > second.Items.Count) { return false; }
+
+            return null;
+        }
+
+        if (first.IsInt && second.IsList)
+        {
+            List<Item> list = new() { new Item(first.Value!.Value) };
+            return CompareItems(new(list), second);
+        }
+
+        if (first.IsList && second.IsInt)
+        {
+            List<Item> list = new() { new Item(second.Value!.Value) };
+            return CompareItems(first, new(list));
+        }
+
+        return null;
+    }
 }
