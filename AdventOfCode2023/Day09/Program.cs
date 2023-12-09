@@ -1,7 +1,6 @@
 ﻿using Common;
 
 var lines = Helpers.ReadInputFile();
-//var lines = Helpers.ReadInputFile("test.txt");
 
 
 var resultOne = 0L;
