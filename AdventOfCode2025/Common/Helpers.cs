@@ -50,4 +50,23 @@ public static class Helpers
 
         return a;
     }
+
+
+    public static IEnumerable<T> GetDivisors<T>(T n) where T : IBinaryInteger<T>
+    {
+        var limit = double.ConvertToInteger<T>(Math.Sqrt(Convert.ToDouble(n)));
+
+        for (T i = T.One; i <= limit; i++)
+        {
+            if (n % i == T.Zero)
+            {
+                yield return i;
+                var other = n / i;
+                if (other != i)
+                {
+                    yield return other;
+                }
+            }
+        }
+    }
 }
