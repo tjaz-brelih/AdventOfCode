@@ -30,7 +30,7 @@ static void GenerateProject(string solutionFolderName, string day)
     Directory.CreateDirectory($"{solutionFolderName}\\Day{day}");
 
     File.WriteAllText($"{solutionFolderName}\\Day{day}\\Day{day}.csproj", GenerateProjectFileContent());
-    File.WriteAllText($"{solutionFolderName}\\Day{day}\\Day{day}.cs", "using Common;");
+    File.WriteAllText($"{solutionFolderName}\\Day{day}\\Day{day}.cs", GenerateProgramContent());
     File.Create($"{solutionFolderName}\\Day{day}\\input.txt").Dispose();
 }
 
@@ -74,3 +74,11 @@ static string GenerateProjectFileContent() =>
   </ItemGroup>
 
 </Project>";
+
+static string GenerateProgramContent() =>
+@"using Common;
+
+var lines = Helpers.ReadInputLines();
+
+
+";
