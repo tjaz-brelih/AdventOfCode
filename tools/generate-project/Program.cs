@@ -78,7 +78,6 @@ static string GenerateProjectFileContent() =>
 static string GenerateProgramContent() =>
 @"using Common;
 
-var lines = Helpers.ReadInputLines();
-
+var lines = Helpers.ReadInputFile();
 
 ";
