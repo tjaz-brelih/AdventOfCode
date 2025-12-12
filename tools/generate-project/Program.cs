@@ -1,5 +1,6 @@
-﻿
+﻿using System.Text;
 using System.CommandLine;
+
 
 Option<string> yearOption = new("--year", "-y") { Required = true };
 Option<string> dayOption = new("--day", "-d") { Required = true };
@@ -29,8 +30,8 @@ static void GenerateProject(string solutionFolderName, string day)
 {
     Directory.CreateDirectory($"{solutionFolderName}\\Day{day}");
 
-    File.WriteAllText($"{solutionFolderName}\\Day{day}\\Day{day}.csproj", GenerateProjectFileContent());
-    File.WriteAllText($"{solutionFolderName}\\Day{day}\\Day{day}.cs", GenerateProgramContent());
+    File.WriteAllText($"{solutionFolderName}\\Day{day}\\Day{day}.csproj", GenerateProjectFileContent(), Encoding.UTF8);
+    File.WriteAllText($"{solutionFolderName}\\Day{day}\\Day{day}.cs", GenerateProgramContent(), Encoding.UTF8);
     File.Create($"{solutionFolderName}\\Day{day}\\input.txt").Dispose();
 }
 
@@ -47,7 +48,7 @@ static void UpdateSolutionFile(string folderName, string solutionName, string da
     output[index] = GenerateSolutionFileContent(day);
     output[index + 1] = "</Solution>";
 
-    File.WriteAllLines(solutionFilePath, output);
+    File.WriteAllLines(solutionFilePath, output, Encoding.UTF8);
 }
 
 static string GenerateSolutionFileContent(string day) =>
