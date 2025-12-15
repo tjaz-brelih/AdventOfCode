@@ -1,4 +1,4 @@
-<Solution>
+﻿<Solution>
   <Project Path="Common/Common.csproj" />
   <Project Path="Day01/Day01.csproj" />
   <Project Path="Day02/Day02.csproj" Id="dd90ab11-0f9c-4066-8430-2a8eb7d29f89" />
@@ -7,4 +7,5 @@
   <Project Path="Day05/Day05.csproj" Id="09c50820-b22d-4f36-aeee-7ef578697fb1" />
   <Project Path="Day06/Day06.csproj" Id="1265bca8-655f-4279-b1c1-a0bd7e5cce85" />
   <Project Path="Day07/Day07.csproj" Id="df7135e5-d743-4bca-8e72-4b57b2b80cb7" />
+  <Project Path="Day08/Day08.csproj" Id="58c64f9d-8013-49c8-9c88-e019126b19ae" />
 </Solution>
