@@ -32,7 +32,7 @@ static void GenerateProject(string solutionFolderName, string day)
 
     File.WriteAllText($"{solutionFolderName}\\Day{day}\\Day{day}.csproj", GenerateProjectFileContent(), Encoding.UTF8);
     File.WriteAllText($"{solutionFolderName}\\Day{day}\\Day{day}.cs", GenerateProgramContent(), Encoding.UTF8);
-    File.Create($"{solutionFolderName}\\Day{day}\\input.txt").Dispose();
+    File.WriteAllText($"{solutionFolderName}\\Day{day}\\input.txt", string.Empty, Encoding.UTF8);
 }
 
 static void UpdateSolutionFile(string folderName, string solutionName, string day)
